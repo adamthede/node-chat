@@ -3,3 +3,9 @@ extends ../shared/template
 block content
   h1= title
 
+  .row
+    .small-8.columns
+      #messages
+    .small-4.columns
+      textarea(autofocus='true')
+      button.tiny.radius#sendmessage Send Message

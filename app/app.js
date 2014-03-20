@@ -25,11 +25,12 @@ app.use(express.bodyParser());
 app.use(express.methodOverride());
 app.use(express.cookieParser());
 app.use(express.session({
-  store : new RedisStore({host: 'localhost', port: 6379}),
+  store : new RedisStore({host: '192.168.11.55', port: 6379}),
   secret: 'change-this-to-a-super-secret-message',
   cookie: { maxAge: 24 * 60 * 60 * 1000 }
 }));
 app.use(app.router);
+
 /* --- pipeline ends   */
 
 var server = require('http').createServer(app);
@@ -37,5 +38,8 @@ server.listen(port, function(){
   console.log('Node server listening. Port: ' + port + ', Database: ' + dbname);
 });
 
-module.exports = app;
+var sockets = require('./lib/sockets');
+var io = require('socket.io').listen(server, {log:true, 'log level':2});
+io.of('/app').on('connection', sockets.connection);
 
+module.exports = app;
